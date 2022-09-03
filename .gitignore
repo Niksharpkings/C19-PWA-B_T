@@ -63,4 +63,3 @@ package-lock.json
 .vs
 .env
 /node_modules
-/node_modules/
