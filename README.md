@@ -1,4 +1,6 @@
 # C19-PWA-B_T
+![image](https://user-images.githubusercontent.com/67552318/188299446-8ec276ac-7662-463c-99f2-9f828d0a0ff8.png)
+
 ## Progressive Web Applications (PWA) Challenge: Budget Tracker
 ```
 - Budget tracker application to allow for offline access and functionality. 
