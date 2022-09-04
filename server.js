@@ -25,7 +25,9 @@ app.use(express.static("public"));
 //     .catch((err) => console.log(err))
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/pwa-budget-tracker", {
   useNewUrlParser: true,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+  useFindAndModify: false
 })
   .then(() => console.log('MongoDB Connected...'))
   .catch((err) => console.log(err));
@@ -34,5 +36,5 @@ mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/pwa-budget-trac
 app.use(require("./routes/api.js"));
 
 app.listen(PORT, () => {
-  console.log(`👨‍💻App running on port ${PORT}!`);
+  console.log(`App running on port ${PORT}!`);
 });
