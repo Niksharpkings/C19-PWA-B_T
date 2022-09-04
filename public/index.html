@@ -14,15 +14,39 @@
 </head>
 <body>
   <div class="wrapper">
+    <h1>Budget Tracker</h1>
+    <canvas id="myChart"></canvas>
+    
     <div class="total">
-      <div class="total">Your total is: $<span id="total">0</span></div>
+      <div class="total">
+        Your total is: $
+        <span id="total">
+          0
+        </span>
+      </div>
     </div>
 
     <div class="form">
-      <input type="text" id="t-name" placeholder="Name of transaction" />
-      <input type="number" min="0" id="t-amount" placeholder="Transaction amount" />
-      <button type="button" id="add-btn"><em class="fa fa-plus buttons"></> Add Funds</button>
-      <button type="button" id="sub-btn"><em class="fa fa-minus"></em> Subtract Funds</button>
+      <div class="inputBox">
+        <div class="tname">
+          <input type="text" id="t-name" placeholder="Name Of Your Transaction" />
+        </div>
+        <div class="tamount">
+        <input type="number" min="0" id="t-amount" placeholder="Transaction Amount" />
+      </div>
+      </div>
+      <div class="operatorBtn">
+        <div class="addbtn">
+          <button type="button" id="add-btn">
+            <em class="fa fa-plus buttons"></em>
+            Add Funds
+          </button>
+        </div>
+          <button type="button" id="sub-btn">
+            <em class="fa fa-minus"></em>
+            Subtract Funds
+          </button>
+      </div>
       <p class="error"></p>
     </div>
 
@@ -36,7 +60,6 @@
         </tbody>
       </table>
     </div>
-    <canvas id="myChart"></canvas>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
