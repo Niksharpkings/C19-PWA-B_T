@@ -23,15 +23,16 @@ app.use(express.static("public"));
 // })
 //     .then(() => console.log('MongoDB Connected...'))
 //     .catch((err) => console.log(err))
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/", {
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/pwa-budget-tracker", {
   useNewUrlParser: true,
   useUnifiedTopology: true
-}).then(() => console.log('MongoDB Connected...'))
- .catch((err) => console.log(err));
+})
+  .then(() => console.log('MongoDB Connected...'))
+  .catch((err) => console.log(err));
 
 // routes here
 app.use(require("./routes/api.js"));
 
 app.listen(PORT, () => {
-  console.log(`App running on port ${PORT}!`);
+  console.log(`👨‍💻App running on port ${PORT}!`);
 });
