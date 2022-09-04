@@ -14,7 +14,9 @@
 @niksharpkings
 https://github.com/Niksharpkings/
 
-### starter code by @Xandromus
+### starter-code
+by @Xandromus and UCLA
+![starter code link](https://github.com/coding-boot-camp/symmetrical-bassoon)
 
 ### Dependencies
 - "compression": "1.7.4",
