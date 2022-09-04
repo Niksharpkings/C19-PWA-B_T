@@ -139,7 +139,7 @@ function sendTransaction(isAdding) {
     amountEl.value = "";
   });
 }
-console.log(sendTransaction)
+
 document.querySelector("#add-btn").onclick = () => {
   sendTransaction(true);
 };

@@ -29,6 +29,9 @@ self.addEventListener("install", (e) => {
       return cache.addAll(FILES_TO_CACHE);
     })
   );
+  // tell the browser to activate this service worker immediately once it
+    // has finished installing
+    self.skipWaiting();
 });
 
 // Respond with cached resources
@@ -36,12 +39,17 @@ self.addEventListener("fetch", (e) => {
   // cache all get requests to /api routes
   if (e.request.url.includes("/api/")) {
     e.respondWith(
-      caches.open(DATA_CACHE_NAME).then(async cache => {
+      caches
+        .open(DATA_CACHE_NAME)
+        .then(async cache => {
         try {
           const response = await fetch(e.request);
           // If the response was good, clone it and store it in the cache.
           if (response.status === 200) {
-            cache.put(e.request.url, response.clone());
+            cache.put(
+              e.request.url,
+              response.clone()
+            );
           }
           return response;
         } catch (err) {
@@ -54,13 +62,15 @@ self.addEventListener("fetch", (e) => {
   }
 
   e.respondWith(
-    fetch(e.request).catch(() => caches.match(e.request).then((response) => {
-      if (response) {
-        return response;
-      } else if (e.request.headers.get("accept").includes("text/html")) {
-        // return the cached home page for all requests for html pages
+    fetch(e.request)
+      .catch(() => caches
+                        .match(e.request)
+                        .then((res) => {
+      if (res) return res;
+      if (e.request.headers
+        .get("accept")
+        .includes("text/html"))
         return caches.match("/");
-      }
     }))
   );
 });
@@ -68,16 +78,17 @@ self.addEventListener("fetch", (e) => {
 // Delete outdated caches
 self.addEventListener('activate', (e) => {
   e.waitUntil(
-    caches.keys().then(function (keyList) {
+    caches
+      .keys()
+      .then((keyList) => {
       // `keyList` contains all cache names under your username.github.io
       // filter out ones that has this app prefix to create white list
       const cacheKeepList = keyList.filter((key) => key.indexOf(APP_PREFIX))
       // add current cache name to white list
       cacheKeepList.push(CACHE_NAME);
-
       return Promise.all(keyList.map((key, i) => {
         if (cacheKeepList.indexOf(key) === -1) {
-          console.log('deleting cache : ' + keyList[i] );
+          console.log(`deleting cache : ${keyList[i]}` );
           return caches.delete(keyList[i]);
         }
       }));
