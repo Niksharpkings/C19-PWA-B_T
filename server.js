@@ -17,19 +17,17 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect('mongodb://localhost/budget', {
+// mongoose.connect('mongodb://localhost/budget', {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// })
+//     .then(() => console.log('MongoDB Connected...'))
+//     .catch((err) => console.log(err))
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/", {
   useNewUrlParser: true,
   useUnifiedTopology: true
-})
-    .then(() => console.log('MongoDB Connected...'))
-    .catch((err) => console.log(err))
-// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/", {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useCreateIndex: true,
-//   useFindAndModify: false,
-// }).then(() => console.log('MongoDB Connected...'))
-// .catch((err) => console.log(err));
+}).then(() => console.log('MongoDB Connected...'))
+ .catch((err) => console.log(err));
 
 // routes here
 app.use(require("./routes/api.js"));
