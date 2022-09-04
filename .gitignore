@@ -61,4 +61,4 @@ package-lock.json
 .vscode
 .vs
 .env
-/node_modules
+node_modules/

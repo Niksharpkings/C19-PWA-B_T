@@ -1,10 +1,11 @@
+
 const express = require("express");
 const logger = require("morgan");
 const mongoose = require("mongoose");
 const compression = require("compression");
 
+
 const PORT = process.env.PORT || 3001;
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/budget";
 
 const app = express();
 
@@ -16,12 +17,21 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(MONGODB_URI, {
+mongoose.connect('mongodb://localhost/budget', {
   useNewUrlParser: true,
-  useFindAndModify: false
-});
+  useUnifiedTopology: true
+})
+    .then(() => console.log('MongoDB Connected...'))
+    .catch((err) => console.log(err))
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+//   useCreateIndex: true,
+//   useFindAndModify: false,
+// }).then(() => console.log('MongoDB Connected...'))
+// .catch((err) => console.log(err));
 
-// routes
+// routes here
 app.use(require("./routes/api.js"));
 
 app.listen(PORT, () => {
