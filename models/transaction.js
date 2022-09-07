@@ -12,8 +12,6 @@ const transactionSchema = new Schema({
   },
   value: {
     type: Number,
-    min: [0, "Must be at least 6, you got {VALUE}"],
-    max: [100000000, "max is 💯 million"],
     required: "Enter A Numerical Value",
   },
   date: {

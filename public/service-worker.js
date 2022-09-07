@@ -17,79 +17,78 @@ const FILES_TO_CACHE = [
   "./icons/icon-152x152.png",
   "./icons/icon-192x192.png",
   "./icons/icon-384x384.png",
-  "./icons/icon-512x512.png"
+  "./icons/icon-512x512.png",
+  "../models/transaction.js"
 ];
 
 // Cache resources
-self.addEventListener("install", (e) => {
+self.addEventListener("install", function(e) {
     e.waitUntil(
       caches
         .open(CACHE_NAME)
         .then((cache) => {
-        console.log(`📲installing cache : ${CACHE_NAME}`);
+          console.log(`📲installing cache : ${CACHE_NAME}`);
           return cache
             .addAll(FILES_TO_CACHE);
-      })
+        })
     );
-  self
-    .skipWaiting();
+    self
+      .skipWaiting();
   });
 self
-  .addEventListener("fetch", (e) => {
-  if (e.request.url.includes("/api/")) {
-    e
-      .respondWith(
-      caches
-        .open(DATA_CACHE_NAME)
-        .then(async cache => {
-        try {
-          const response = await fetch(e.request);
-          if (200 === response.status) {
-            cache.put(
-              e.request.url,
-              response.clone()
-            );
-          }
-          return response;
-        } catch (err) {
-          return
-        }
-      }).catch(err => console.log(err))
-    );
-    return;
-  }
-  e.respondWith(
-    fetch(e.request)
-      .catch(async () => {
-        const res = await caches
-          .match(e.request);
-        if (res)
-          {
-          return res;
-        }
-        if (e.request.headers
-        .get("accept")
-        .includes("text/html"))
-          {
-          return caches.match("/");
-        }
-      })
-  );
-});
+  .addEventListener("fetch", function (e) {
+      if (e.request.url.includes("/api/")) {
+        e
+          .respondWith(
+            caches
+              .open(DATA_CACHE_NAME)
+              .then(async function(cache) {
+                try {
+                  const response = await fetch(e.request);
+                  if (200 === response.status) {
+                    cache.put(
+                      e.request.url,
+                      response.clone()
+                    );
+                  }
+                  return response;
+                } catch (err) {
+                  return;
+                }
+              }).catch(err => console.log(err))
+          );
+        return;
+      }
+      e.respondWith(
+        fetch(e.request)
+          .catch(async function() {
+            const res = await caches
+              .match(e.request);
+            if (res) {
+              return res;
+            }
+            if (e.request.headers
+              .get("accept")
+              .includes("text/html")) {
+              return caches.match("/");
+            }
+          })
+      );
+    });
 
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches
-      .keys()
-      .then((keyList) => {
-      const cacheKeepList = keyList.filter((key) => key.indexOf(APP_PREFIX))
-      cacheKeepList.push(CACHE_NAME);
-      return Promise.all(keyList.map((key, i) => {
-        if (!cacheKeepList.includes(key)) {
-          console.log(`deleting cache : ${keyList[i]}` );
-          return caches.delete(keyList[i]);
-        }
-      }));
-    })
-  );
-});
+self.addEventListener('activate', function(e) {
+    e.waitUntil(
+      caches
+        .keys()
+        .then(function(keyList) {
+          const cacheKeepList = keyList.filter((key) => key.indexOf(APP_PREFIX));
+          cacheKeepList.push(CACHE_NAME);
+          return Promise.all(keyList.map(function(key, i) {
+            if (!cacheKeepList.includes(key)) {
+              console.log(`deleting cache : ${keyList[i]}`);
+              return caches.delete(keyList[i]);
+            }
+          }));
+        })
+    );
+  });
