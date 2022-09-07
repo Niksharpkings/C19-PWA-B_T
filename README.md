@@ -37,8 +37,8 @@ Addition help from: developer.mozilla, Mongoose, nodemon & chromeDevTools
 <code>npm i --save</code>
 
 ### Run
-<code> mongod </code> 
-<code> npm run devStart </code>
+- <code> mongod </code> 
+- <code> npm run devStart </code>
 
 
 ### License
