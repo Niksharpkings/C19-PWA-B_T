@@ -1,45 +1,56 @@
-const indexedDB =
-  window.indexedDB ||
-  window.mozIndexedDB ||
-  window.webkitIndexedDB ||
-  window.msIndexedDB ||
-  window.shimIndexedDB;
+//Comments from module 18.4.4 - 18.5, used pizza_hunt for code placement
 
+// create variable to hold db connection
 let db;
-const req = indexedDB.open("budget", 1);
+// establish a connection to IndexedDB database called 'budget' and set it to version 1
+const request = indexedDB.open("budget", 1);
 
-req.onupgradeneeded = ({ target }) => {
-  const db = target.result;
-  db.createObjectStore("pending", { autoIncrement: true });
+// this event will emit if the database version changes (nonexistant to version 1, v1 to v2, etc.)
+request.onupgradeneeded = function(event) {
+  // save a reference to the database 
+  const db = event.target.result;
+  // create an object store (table) called `new_budget`, set it to have an auto incrementing primary key of sorts
+  db.createObjectStore("new_budget", { autoIncrement: true });
 };
 
-req.onsuccess = ({ target }) => {
-  db = target.result;
-
-  // check if app is online before reading from db
+// upon a successful 
+request.onsuccess = function(event) {
+  // when db is successfully created with its object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable
+  db = event.target.result;
+console.log(navigator.geolocation)
+  // check if app is online, if yes run collectData(); function to send all local db data to api
   if (navigator.onLine) {
-    lookUpDB();
+    // we haven't created this yet, but we will soon, so let's comment it out for now
+    collectData();
   }
 };
 
-req.onerror = (event) => {
-  console.log(`Oh Noo ${event.target.errorCode}`);
+request.onerror = function(event) {
+  // log error here
+  console.log(`Oh Noooo ${event.target.errorCode}`);
 };
 
+// This function will be executed if we attempt to submit a new pizza and there's no internet connection
 function saveRecord(record) {
-  const transaction = db.transaction(["pending"], "readwrite");
-  const store = transaction.objectStore("pending");
-  store.add(record);
+  // open a new transaction with the database with read and write permissions 
+  const transaction = db.transaction(["new_budget"], "readwrite");
+   // access the object store for `new_budget`
+  const budgetObjectStore = transaction.objectStore("new_budget");
+  // add record to your store with add method
+  budgetObjectStore.add(record);
 }
 
-const lookUpDB = () => {
-  const transaction = db.transaction(["pending"], "readwrite");
-  const store = transaction.objectStore("pending");
-  const getAll = store.getAll();
+function collectData() {
+  // open a transaction on your db
+  const transaction = db.transaction(["new_budget"], "readwrite");
+  // access your object store
+  const budgetObjectStore = transaction.objectStore("new_budget");
+   // get all records from store and set to a variable
+  const getAll = budgetObjectStore.getAll();
 
   getAll.onsuccess = () => {
     if (getAll.result.length > 0) {
-      fetch("/api/transaction/bulk", {
+      fetch("/api/transaction", {
         method: "POST",
         body: JSON.stringify(getAll.result),
         headers: {
@@ -48,12 +59,22 @@ const lookUpDB = () => {
         }
       })
         .then(response => response.json())
-        .then(() => {
-          const transaction = db.transaction(["pending"], "readwrite");
-          const store = transaction.objectStore("pending");
-          store.clear();
+         // open one more transaction
+        .then(serverResponse => {
+          if (serverResponse.message) {
+            throw new Error(serverResponse);
+          }
+          // open one more transaction
+          const transaction = db.transaction(["new_budget"], "readwrite");
+          // access the new_pizza object store
+          const budgetObjectStore = transaction.objectStore("new_budget");
+           // clear all items in your store
+          budgetObjectStore.clear();
+        })
+        .catch((err) => {
+          console.warn(err, "oh Noooo something went wrong at function collectData idb.js");
         });
     }
   };
-};
-window.addEventListener("online", lookUpDB);
+}
+window.addEventListener("online", collectData);

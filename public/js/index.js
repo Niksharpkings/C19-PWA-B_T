@@ -1,31 +1,28 @@
 let transactions = [];
-let myChart;
-
-const t_nameEl = document.querySelector("#t-name");
-const t_amountEl = document.querySelector("#t-amount");
-const form_errorEl = document.querySelector(".form .error");
-const enumerateEl = document.querySelector("#total");
-const tbody = document.querySelector("#tbody");
-const trEl = document.createElement("tr");
-const ctx = document.getElementById("myChart").getContext("2d");
+let dataChart;
 
 fetch("/api/transaction")
   .then(response => response.json())
-  .then(d => {
-      transactions = d;
-      popAmount();
-      popTable();
-      popChart();
+  .then(data => {
+    transactions = data;
+    popAmount();
+    popTable();
+    popChart();
     });
 
 const popAmount = () => {
-  const enumerate = transactions.reduce((enumerate, amount) => parseInt(amount.value) + enumerate, 0);
+  const enumerate = transactions.reduce((enumerate, total) => {
+    return enumerate + parseInt(total.value);
+  }, 0);
+  const enumerateEl = document.querySelector("#total");
   enumerateEl.textContent = enumerate;
 };
 
 const popTable = () => {
+  const tbody = document.querySelector("#tbody");
   tbody.innerHTML = "";
   transactions.forEach((transaction) => {
+      const trEl = document.createElement("tr");
       trEl.innerHTML = `
       <td>${transaction.name}</td>
       <td>${transaction.value}</td>
@@ -35,23 +32,22 @@ const popTable = () => {
     });
 };
 
-const popChart = () => {
-    const reversed = transactions
-  .slice()
-  .reverse();
+function popChart() {
+    const reversed = transactions.slice().reverse();
     let sum = 0;
     const labels = reversed.map(t => {
       const date = new Date(t.date);
-      return `${1 + date.getMonth()}/${date.getDate()}/${date.getFullYear()}`;
+      return `${date.getMonth() + 1}/${date.getDate()}/${date.getFullYear()}`;
     });
     const data = reversed.map((t) => {
         sum += parseInt(t.value);
         return sum;
       });
-    if (myChart) {
-      myChart.destroy();
-    }
-    myChart = new Chart(ctx, {
+    if (dataChart) {
+      dataChart.destroy();
+  }
+    const ctx = document.getElementById("myChart").getContext("2d");
+    dataChart = new Chart(ctx, {
       type: 'line',
         data: {
           labels,
@@ -63,12 +59,17 @@ const popChart = () => {
           }]
       }
     });
-};
+}
+
 const sendTransaction = (isAdding) => {
+  const t_nameEl = document.querySelector("#t-name");
+  const t_amountEl = document.querySelector("#t-amount");
+  const form_errorEl = document.querySelector(".form .error");
+
   switch ("") {
     case t_nameEl.value:
     case t_amountEl.value:
-      form_errorEl.textContent = "Please Input A Transaction Amount & Name";
+      form_errorEl.textContent = "Please Input Both A Transaction Amount & Name";
       return;
   }
   form_errorEl.textContent = "";
@@ -80,15 +81,13 @@ const sendTransaction = (isAdding) => {
   if (!isAdding) {
     transaction.value *= -1;
   }
-  transactions
-    .unshift(transaction);
+  transactions.unshift(transaction);
   popChart();
   popTable();
   popAmount();
   fetch("/api/transaction", {
     method: "POST",
-    body: JSON
-      .stringify(transaction),
+    body: JSON.stringify(transaction),
     headers: {
       Accept: "application/json, text/plain, */*",
       "Content-Type": "application/json"
@@ -96,14 +95,15 @@ const sendTransaction = (isAdding) => {
   })
   .then(response => response.json())
   .then(data => {
-    if (!data.errors) {
-      t_nameEl.value = "";
-      t_amountEl.value = "";
+    if (data.errors) {
+      form_errorEl.textContent = "Please Provide Both A Transaction Amount & Name";
       return;
     }
-    form_errorEl.textContent = "Please Provide Both A Transaction Amount & Name";
+    t_nameEl.value = "";
+    t_amountEl.value = "";
   })
-  .catch((_error) => {
+  .catch(err => {
+    console.log(err);
     saveRecord(transaction);
     t_nameEl.value = "";
     t_amountEl.value = "";
