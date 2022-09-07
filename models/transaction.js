@@ -8,7 +8,7 @@ const transactionSchema = new Schema({
     trim: true,
     minlength: 1,
     maxlength: 200,
-    required: [ true, "Name of transaction required" ],
+    required: [true, "Name of transaction required"],
   },
   value: {
     type: Number,
@@ -18,7 +18,14 @@ const transactionSchema = new Schema({
     type: Date,
     default: Date.now,
   },
-});
+},
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    id: false
+  }
+);
 
 const Transaction = mongoose.model("Transaction", transactionSchema);
 
