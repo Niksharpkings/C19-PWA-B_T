@@ -22,30 +22,29 @@ const FILES_TO_CACHE = [
 
 // Cache resources
 self.addEventListener("install", (e) => {
-  // Perform install steps
-  e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      console.log(`installing cache : ${CACHE_NAME}`)
-      return cache.addAll(FILES_TO_CACHE);
-    })
-  );
-  // tell the browser to activate this service worker immediately once it
-    // has finished installing
-    self.skipWaiting();
-});
-
-// Respond with cached resources
-self.addEventListener("fetch", (e) => {
-  // cache all get requests to /api routes
+    e.waitUntil(
+      caches
+        .open(CACHE_NAME)
+        .then((cache) => {
+        console.log(`📲installing cache : ${CACHE_NAME}`);
+          return cache
+            .addAll(FILES_TO_CACHE);
+      })
+    );
+  self
+    .skipWaiting();
+  });
+self
+  .addEventListener("fetch", (e) => {
   if (e.request.url.includes("/api/")) {
-    e.respondWith(
+    e
+      .respondWith(
       caches
         .open(DATA_CACHE_NAME)
         .then(async cache => {
         try {
           const response = await fetch(e.request);
-          // If the response was good, clone it and store it in the cache.
-          if (response.status === 200) {
+          if (200 === response.status) {
             cache.put(
               e.request.url,
               response.clone()
@@ -57,37 +56,36 @@ self.addEventListener("fetch", (e) => {
         }
       }).catch(err => console.log(err))
     );
-
     return;
   }
-
   e.respondWith(
     fetch(e.request)
-      .catch(() => caches
-                        .match(e.request)
-                        .then((res) => {
-      if (res) return res;
-      if (e.request.headers
+      .catch(async () => {
+        const res = await caches
+          .match(e.request);
+        if (res)
+          {
+          return res;
+        }
+        if (e.request.headers
         .get("accept")
         .includes("text/html"))
-        return caches.match("/");
-    }))
+          {
+          return caches.match("/");
+        }
+      })
   );
 });
 
-// Delete outdated caches
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches
       .keys()
       .then((keyList) => {
-      // `keyList` contains all cache names under your username.github.io
-      // filter out ones that has this app prefix to create white list
       const cacheKeepList = keyList.filter((key) => key.indexOf(APP_PREFIX))
-      // add current cache name to white list
       cacheKeepList.push(CACHE_NAME);
       return Promise.all(keyList.map((key, i) => {
-        if (cacheKeepList.indexOf(key) === -1) {
+        if (!cacheKeepList.includes(key)) {
           console.log(`deleting cache : ${keyList[i]}` );
           return caches.delete(keyList[i]);
         }

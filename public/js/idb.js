@@ -6,24 +6,24 @@ const indexedDB =
   window.shimIndexedDB;
 
 let db;
-const request = indexedDB.open("budget", 1);
+const req = indexedDB.open("budget", 1);
 
-request.onupgradeneeded = ({ target }) => {
+req.onupgradeneeded = ({ target }) => {
   const db = target.result;
   db.createObjectStore("pending", { autoIncrement: true });
 };
 
-request.onsuccess = ({ target }) => {
+req.onsuccess = ({ target }) => {
   db = target.result;
 
   // check if app is online before reading from db
   if (navigator.onLine) {
-    checkDatabase();
+    lookUpDB();
   }
 };
 
-request.onerror = (event) => {
-  console.log(`Woops! ${event.target.errorCode}`);
+req.onerror = (event) => {
+  console.log(`Oh Noo ${event.target.errorCode}`);
 };
 
 function saveRecord(record) {
@@ -32,7 +32,7 @@ function saveRecord(record) {
   store.add(record);
 }
 
-function checkDatabase() {
+const lookUpDB = () => {
   const transaction = db.transaction(["pending"], "readwrite");
   const store = transaction.objectStore("pending");
   const getAll = store.getAll();
@@ -47,18 +47,13 @@ function checkDatabase() {
           "Content-Type": "application/json"
         }
       })
-      .then(response => {
-        return response.json();
-      })
-      .then(() => {
-        // delete records if successful
-        const transaction = db.transaction(["pending"], "readwrite");
-        const store = transaction.objectStore("pending");
-        store.clear();
-      });
+        .then(response => response.json())
+        .then(() => {
+          const transaction = db.transaction(["pending"], "readwrite");
+          const store = transaction.objectStore("pending");
+          store.clear();
+        });
     }
   };
-}
-
-// listen for app coming back online
-window.addEventListener("online", checkDatabase);
+};
+window.addEventListener("online", lookUpDB);
