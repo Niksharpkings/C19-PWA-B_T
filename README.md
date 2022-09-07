@@ -21,7 +21,7 @@ by @Xandromus and UCLA
 [starter code link](https://github.com/coding-boot-camp/symmetrical-bassoon)
 
 Used module 18.4 - 18.5 - 19.5 to complete this challange. 
-Addition help from: developer.mozilla, Mongoose, nodemon, Fiddler & chromeDevTools
+Addition help from: developer.mozilla, Mongoose, nodemon & chromeDevTools
 
 ### Dependencies
 -    "compression": "^1.7.4",
