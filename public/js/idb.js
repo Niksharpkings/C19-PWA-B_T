@@ -17,18 +17,18 @@ request.onupgradeneeded = function(event) {
 request.onsuccess = function(event) {
   // when db is successfully created with its object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable
   db = event.target.result;
-  console.log(`navigator.connection`, navigator.connection);
-  console.log(`navigator.hardwareConcurrency`, navigator.hardwareConcurrency);
-  console.log(`navigator.language:`, navigator.language);
-  console.log(`navigator.maxTouchPoints: `, navigator.maxTouchPoints);
-  console.log('navigator.mediaCapabilities:', navigator.mediaCapabilities);
-  console.log('navigator.mediaDevices:', navigator.mediaDevices);
-  console.log('navigator.mediaSession:', navigator.mediaSession);
-  console.log('navigator.serviceWorker:', navigator.serviceWorker);
-  console.log('navigator.storage:', navigator.storage);
-  console.log('navigator.userAgent:', navigator.userAgent);
-  console.log('navigator.userAgentData:', navigator.userAgentData);
-  console.log('navigator.webdriver:', navigator.webdriver);
+  // console.log(`navigator.connection`, navigator.connection);
+  // console.log(`navigator.hardwareConcurrency`, navigator.hardwareConcurrency);
+  // console.log(`navigator.language:`, navigator.language);
+  // console.log(`navigator.maxTouchPoints: `, navigator.maxTouchPoints);
+  // console.log('navigator.mediaCapabilities:', navigator.mediaCapabilities);
+  // console.log('navigator.mediaDevices:', navigator.mediaDevices);
+  // console.log('navigator.mediaSession:', navigator.mediaSession);
+  // console.log('navigator.serviceWorker:', navigator.serviceWorker);
+  // console.log('navigator.storage:', navigator.storage);
+  // console.log('navigator.userAgent:', navigator.userAgent);
+  // console.log('navigator.userAgentData:', navigator.userAgentData);
+  // console.log('navigator.webdriver:', navigator.webdriver);
   // console.log('navigator.vibrate(morse code sos) 🤣🤣: ', navigator.vibrate([100,30,100,30,100,30,200,30,200,30,200,30,100,30,100,30,100]));
   // check if app is online, if yes run collectData(); function to send all local db data to api
   if (navigator.onLine) {
