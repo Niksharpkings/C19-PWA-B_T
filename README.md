@@ -32,7 +32,16 @@ Addition help from: developer.mozilla, Mongoose, nodemon & chromeDevTools
 -    "morgan": "^1.10.0",
 -    "nodemon": "^2.0.19"
 
+### InstalL
+
+<code>npm i --save</code>
+
+### Run
+<code> mongod </code> 
+<code> npm run devStart </code>
+
+
 ### License
-![Apache License 2.0](https://github.com/Niksharpkings/C19-PWA-B_T/blob/main/LICENSE) 
+[Apache License 2.0](https://github.com/Niksharpkings/C19-PWA-B_T/blob/main/LICENSE) 
 - free to use
 
