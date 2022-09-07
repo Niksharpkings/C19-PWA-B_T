@@ -29,7 +29,7 @@ request.onsuccess = function(event) {
   console.log('navigator.userAgent:', navigator.userAgent);
   console.log('navigator.userAgentData:', navigator.userAgentData);
   console.log('navigator.webdriver:', navigator.webdriver);
-  console.log('navigator.vibrate(morse code sos) 🤣🤣: ', navigator.vibrate([100,30,100,30,100,30,200,30,200,30,200,30,100,30,100,30,100]));
+  // console.log('navigator.vibrate(morse code sos) 🤣🤣: ', navigator.vibrate([100,30,100,30,100,30,200,30,200,30,200,30,100,30,100,30,100]));
   // check if app is online, if yes run collectData(); function to send all local db data to api
   if (navigator.onLine) {
     // we haven't created this yet, but we will soon, so let's comment it out for now
