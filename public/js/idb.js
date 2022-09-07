@@ -17,8 +17,8 @@ request.onupgradeneeded = function(event) {
 request.onsuccess = function(event) {
   // when db is successfully created with its object store (from onupgradedneeded event above) or simply established a connection, save reference to db in global variable
   db = event.target.result;
-  console.log(`navigator.connection`, navigator.connection)
-  console.log(`navigator.hardwareConcurrency`, navigator.hardwareConcurrency)
+  console.log(`navigator.connection`, navigator.connection);
+  console.log(`navigator.hardwareConcurrency`, navigator.hardwareConcurrency);
   console.log(`navigator.language:`, navigator.language);
   console.log(`navigator.maxTouchPoints: `, navigator.maxTouchPoints);
   console.log('navigator.mediaCapabilities:', navigator.mediaCapabilities);
