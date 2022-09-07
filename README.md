@@ -1,5 +1,5 @@
 # C19-PWA-B_T
-![image](https://user-images.githubusercontent.com/67552318/188299446-8ec276ac-7662-463c-99f2-9f828d0a0ff8.png)
+
 
 ## Progressive Web Applications (PWA) Challenge: Budget Tracker
 ```
@@ -9,8 +9,8 @@
 ```
 
 ## Depoloyment Site
-- DataBase Hosted by: ![mongoDB](https://www.mongodb.com/)
-- Live Deployed Site is located at: ![Heroku c19-pwa-bt](https://c19-pwa-bt.herokuapp.com/)
+- DataBase Hosted by: [mongoDB](https://www.mongodb.com/)
+- Live Deployed Site is located at: [Heroku c19-pwa-bt](https://c19-pwa-bt.herokuapp.com/)
 
 ### GitHub Repo
 @niksharpkings
@@ -18,7 +18,7 @@ https://github.com/Niksharpkings/
 
 ### starter-code
 by @Xandromus and UCLA
-![starter code link](https://github.com/coding-boot-camp/symmetrical-bassoon)
+[starter code link](https://github.com/coding-boot-camp/symmetrical-bassoon)
 
 ### Dependencies
 - "compression": "1.7.4",
