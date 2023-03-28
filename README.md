@@ -1,4 +1,5 @@
-# !!! SAD FACE Heroku desided to nuke the Free Tier Addon SQL Database with mongo... Site No longer Running Due it.
+# //! Heroku no longer supports free mangosDB mySQL database system since Nov 2022.
+Thus, deployed link and app no longer function unless it's runned thru local host only at the time being. Currently looking for a free public or open souced alternative for hosting this repo live site 
 
 # C19-PWA-B_T
 ![image](https://user-images.githubusercontent.com/67552318/188849381-7fb3db94-3087-4af0-8ed1-d917cabcf3d0.png)
